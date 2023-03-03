@@ -1,7 +1,7 @@
 .App {
   text-align: center;
   width: 70%;
-  margin:auto auto;
+  margin: auto auto;
 }
 
 .App-logo {
@@ -30,24 +30,24 @@
   color: #61dafb;
 }
 
-.fat{
+.fat {
   font-weight: bolder;
 }
 
-#displayOrder{
-  display:grid;
-  grid-template-columns:  auto auto auto;
+#displayOrder {
+  display: grid;
+  grid-template-columns: auto auto auto;
 }
 
-#button{
+#button {
   background-color: lightgreen;
-  padding: .5vw;
+  padding: 0.5vw;
   border-radius: 10px;
   font-weight: bolder;
 }
 
-#prodContainer{
-  display:flex;
+#prodContainer {
+  display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -56,104 +56,94 @@
   height: 400px;
   margin: 1vw;
   box-shadow: 0px 1px 2px darkgray;
-  border-radius: .7vw;
-  color:black;
-   
+  border-radius: 0.7vw;
+  color: black;
 }
 
-#rea{
+#rea {
   background-color: green;
   color: white;
   font-weight: bold;
   border-radius: 5px;
   box-shadow: 0px 1px 2px darkgray;
   width: fit-content;
-  padding: .5vw;
+  padding: 0.5vw;
   margin-top: 1vw;
 }
 
-#searchField{
+#searchField {
   margin-top: 2vw;
   font-size: large;
-  padding: .3vw;
+  padding: 0.3vw;
   margin: auto;
   margin-top: 2vw;
-  
 }
 
-a{
+a {
   text-decoration: none;
 }
 
-#search{
-  width: 300px; 
-  height: 25px; 
-  text-align: center; 
-  border-radius:  10px
+#search {
+  width: 300px;
+  height: 25px;
+  text-align: center;
+  border-radius: 10px;
 }
 
-.imgPort{
+.imgPort {
   width: 175px;
   max-height: 273px;
- 
 }
-.imgLand{
+.imgLand {
   max-width: 273px;
   height: 175px;
-  
 }
 
-
-
-.noProd{
+.noProd {
   margin-top: 2vw;
   font-size: large;
   color: red;
 }
 
-.reaPris{
+.reaPris {
   font-weight: bolder;
-  color: red
-
+  color: red;
 }
 
-.strikeThrough{
+.strikeThrough {
   text-decoration: line-through;
 }
 
-.prodPageDiv{
+.prodPageDiv {
   margin: auto auto;
   margin-top: 5vw;
   text-align: center;
   width: 40vw;
   box-shadow: 0px 1px 2px darkgray;
-  padding:1vw;
-  border-radius: .7vw;
+  padding: 1vw;
+  border-radius: 0.7vw;
 }
 
-.description{
+.description {
   margin: auto auto;
   text-align: center;
-  margin-bottom: .7vw;
+  margin-bottom: 0.7vw;
   color: lightslategrey;
 }
-.buyMe{
+.buyMe {
   all: unset;
   background-color: green;
   font-weight: bold;
   color: white;
-  padding: .3vw;
+  padding: 0.3vw;
   border-radius: 5px;
   box-shadow: 0px 1px 2px black;
   margin-top: 1vw;
 }
-.buyMe:hover{
-  
+.buyMe:hover {
   background-color: darkolivegreen;
-  cursor:  pointer;
-  
+  cursor: pointer;
 }
-
 
 @keyframes App-logo-spin {
   from {
