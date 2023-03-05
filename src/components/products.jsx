@@ -8,7 +8,7 @@ const Products = () => {
 
   const id = useLocation();
   const productId = id.state.id;
-  const url = "http://localhost:3001/products/";
+  const url = "https://localhost:7093/products/";
   const getProdUrl = url + productId;
 
   useEffect(() => {
@@ -23,29 +23,29 @@ const Products = () => {
       });
   }, [getProdUrl]);
 
-  const decimalCheck = (pris, campaign) => {
+  const decimalCheck = (pris, rabattPris, campaign) => {
     // kontrollerar prisets decimaler. Samt, om det är rea, så stryk över det gamla priset.
 
     if (pris % 1 === 0) {
-      if (campaign && campaign.discountPercent < 100) {
+      if (campaign !== "Null" && rabattPris < 100) {
         return <div className="strikeThrough">{pris} Kr</div>;
       }
       return pris + " Kr";
     }
     if (!pris % 1 === 0) {
       pris = Math.round(pris);
-      if (campaign && campaign.discountPercent < 100) {
+      if (campaign !== "Null" && rabattPris < 100) {
         return <div className="strikeThrough">{pris} Kr</div>;
       }
       return pris + " Kr";
     }
   };
 
-  const campaignPrice = (pris, campaign) => {
+  const campaignPrice = (pris, rabattProcent, campaign) => {
     // uppdaterar priset med procentsats
-    if (campaign) {
-      if (campaign.discountPercent < 100) {
-        const discount = (100 - campaign.discountPercent) / 100;
+    if (campaign !== "Null") {
+      if (rabattProcent < 100) {
+        const discount = (100 - rabattProcent) / 100;
         pris = pris * discount;
 
         if (!pris % 1 === 0) {
@@ -56,12 +56,15 @@ const Products = () => {
     }
   };
 
-  const renderCampaign = (campaign) => {
+  const renderCampaign = (campaign, rabattProcent) => {
     // Kollar om det är en aktiv kampanj, samt att rabatten inte överstriger 100% ifall den gör det så kommer INTE en rea flagga presenteras
-    for (const item in campaign) {
-      if (item && campaign.discountPercent < 100) {
-        return <div id="rea">Rea!</div>;
-      }
+    if (campaign !== "Null") {
+      return (
+        <div id="reaFlagDivProdPage">
+          <div id="rea">Rea!</div>
+          <div id="reaProcent">{rabattProcent} %</div>
+        </div>
+      );
     }
   };
 
@@ -72,14 +75,16 @@ const Products = () => {
   const mapData = (array) => {
     return (
       <div className="prodPageDiv">
-        {renderCampaign(item.campaign)}
-        <ProdImage imageUrl={item.productImage} />
+        {renderCampaign(array.campaign, array.reapris)}
+        <ProdImage imageUrl={array.imageUrl} />
 
         <h3>{array.name}</h3>
         <div className="description">{array.description}</div>
-        <div className="fat">{decimalCheck(item.price, item.campaign)}</div>
+        <div className="fat">
+          {decimalCheck(array.price, array.reapris, array.campaign)}
+        </div>
         <div className="reaPris">
-          {campaignPrice(item.price, item.campaign)}
+          {campaignPrice(array.price, array.reapris, array.campaign)}
         </div>
         <button className="buyMe" onClick={handleClick}>
           Lägg i Varukorg

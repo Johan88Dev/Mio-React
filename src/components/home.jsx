@@ -16,7 +16,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:3001/products")
+    fetch("https://localhost:7093/products")
       .then((response) => {
         if (response.status >= 400) {
           throw new Error("Server responds with error!");
@@ -38,7 +38,7 @@ class Home extends Component {
           let arrayForImages = this.state.items;
 
           for (let i = 0; i < arrayForImages.length; i++) {
-            this.filterImages(arrayForImages[i].productImage);
+            this.filterImages(arrayForImages[i].imageUrl);
           }
         },
         (err) => {
@@ -60,10 +60,7 @@ class Home extends Component {
       // kolla om bilden har en höjd eller inte
       let products = this.state.items;
       for (let i = 0; i < products.length; i++) {
-        if (
-          products[i].productImage === url ||
-          products[i].productImage === null
-        ) {
+        if (products[i].imageUrl === url || products[i].imageUrl === null) {
           products.splice(i, 1);
         }
       }
@@ -73,16 +70,19 @@ class Home extends Component {
     }
   }
 
-  renderCampaign(campaign) {
+  renderCampaign(campaign, rabattProcent) {
     // Kollar om det är en aktiv kampanj, samt att rabatten inte överstriger 100% ifall den gör det så kommer INTE en rea flagga presenteras
-    if (campaign) {
-      if (campaign.discountPercent < 100) {
-        return <div id="rea">Rea!</div>;
-      }
+    if (campaign !== "Null" && rabattProcent < 100) {
+      return (
+        <div id="reaFlagDivMainPage">
+          <div id="rea">Rea!</div>
+          <div id="reaProcent">{rabattProcent} %</div>
+        </div>
+      );
     }
   }
 
-  getImages(imageUrl, productImageUrl) {
+  getImages(imageUrl) {
     // Hämtar bilder efter kombinerad URL
 
     let picture = new Image();
@@ -136,29 +136,30 @@ class Home extends Component {
     } else this.componentDidMount();
   };
 
-  decimalCheck(pris, campaign) {
+  decimalCheck(pris, rabattPris, campaign) {
     // kontrollerar prisets decimaler. Samt, om det är rea, så stryk över det gamla priset.
 
     if (pris % 1 === 0) {
-      if (campaign && campaign.discountPercent < 100) {
+      if (campaign !== "Null" && rabattPris < 100) {
         return <div className="strikeThrough">{pris} Kr</div>;
       }
       return pris + " Kr";
     }
     if (!pris % 1 === 0) {
       pris = Math.round(pris);
-      if (campaign && campaign.discountPercent < 100) {
+      if (campaign !== "Null" && rabattPris < 100) {
         return <div className="strikeThrough">{pris} Kr</div>;
       }
       return pris + " Kr";
     }
   }
 
-  campaignPrice(pris, campaign) {
+  campaignPrice(pris, rabattProcent, campaign) {
     // uppdaterar priset med procentsats
-    if (campaign) {
-      if (campaign.discountPercent < 100) {
-        const discount = (100 - campaign.discountPercent) / 100;
+
+    if (campaign !== "Null") {
+      if (rabattProcent < 100) {
+        const discount = (100 - rabattProcent) / 100;
         pris = pris * discount;
 
         if (!pris % 1 === 0) {
@@ -171,7 +172,7 @@ class Home extends Component {
 
   render() {
     if (!this.state.isLoaded) {
-      return <div>Laddar...</div>;
+      return <h1 id="laddar">Hämtar Produkter...</h1>;
     } else if (this.state.items.length === 0) {
       return (
         <div className="App">
@@ -188,21 +189,33 @@ class Home extends Component {
               <Link
                 key={index}
                 to="/products"
-                state={{ id: item.id, url: this.baseUrl + item.productImage }}
+                state={{ id: item.id, url: this.baseUrl + item.imageUrl }}
               >
                 <div id="prodContainer">
+                  {this.renderCampaign(item.campaign, item.reapris)}
                   <div id="innerProdDiv">
-                    {this.renderCampaign(item.campaign)}
-                    {this.getImages(
-                      this.state.baseUrl + item.productImage,
-                      item.productImage
-                    )}
-                    <div className="fat">{item.name}</div>
+                    <div id="imageDiv">
+                      {this.getImages(
+                        this.state.baseUrl + item.imageUrl,
+                        item.imageUrl
+                      )}
+                    </div>
+                  </div>
+                  <div id="alignText">
+                    <h4>{item.name}</h4>
                     <div className="fat">
-                      {this.decimalCheck(item.price, item.campaign)}
+                      {this.decimalCheck(
+                        item.price,
+                        item.reapris,
+                        item.campaign
+                      )}
                     </div>
                     <div className="reaPris">
-                      {this.campaignPrice(item.price, item.campaign)}
+                      {this.campaignPrice(
+                        item.price,
+                        item.reapris,
+                        item.campaign
+                      )}
                     </div>
                   </div>
                 </div>
