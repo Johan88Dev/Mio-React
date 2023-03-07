@@ -58,7 +58,7 @@ const Products = () => {
 
   const renderCampaign = (campaign, rabattProcent) => {
     // Kollar om det är en aktiv kampanj, samt att rabatten inte överstriger 100% ifall den gör det så kommer INTE en rea flagga presenteras
-    if (campaign !== "Null") {
+    if (campaign !== "Null" && rabattProcent < 100) {
       return (
         <div id="reaFlagDivProdPage">
           <div id="rea">Rea!</div>
